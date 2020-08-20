@@ -1,24 +1,28 @@
-<html>
-<head>
-<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
-</head>
-<body>
-<script>
-$( document ).ready(function() {
-  $.ajax({
-    url: "http://phpservice-service",
-    dataType: "json"
-  }).done(function(result) {
-    $("#result").html(result.message);
-  });
-});
+<?php 
+$response = get_web_page("http://phpservice-service");
+$resArr = array();
+$resArr = json_decode($response);
+echo "<pre>"; print_r($resArr); echo "</pre>";
 
+function get_web_page($url) {
+    $options = array(
+        CURLOPT_RETURNTRANSFER => true,   // return web page
+        CURLOPT_HEADER         => false,  // don't return headers
+        CURLOPT_FOLLOWLOCATION => true,   // follow redirects
+        CURLOPT_MAXREDIRS      => 10,     // stop after 10 redirects
+        CURLOPT_ENCODING       => "",     // handle compressed
+        CURLOPT_USERAGENT      => "test", // name of client
+        CURLOPT_AUTOREFERER    => true,   // set referrer on redirect
+        CURLOPT_CONNECTTIMEOUT => 120,    // time-out on connect
+        CURLOPT_TIMEOUT        => 120,    // time-out on response
+    ); 
 
+    $ch = curl_init($url);
+    curl_setopt_array($ch, $options);
 
-</script>
-  <?php echo '<h1>HELLO AND WELCOME</h1>';?>
-  <p> The result is:</p>
-  <p id="result"></p>
-</body>
+    $content  = curl_exec($ch);
 
-</html>
+    curl_close($ch);
+
+    return $content;
+}
