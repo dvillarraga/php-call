@@ -1,4 +1,4 @@
-<h1>GUTEN TAG</h1>
+<h1>HALLO | HELLO | HOLA</h1>
 <?php 
 $response = get_web_page("http://phpservice-service.prod");
 $resArr = array();
